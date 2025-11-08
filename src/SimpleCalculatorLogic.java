@@ -16,32 +16,30 @@ public class SimpleCalculatorLogic
 
     /**
      * 0 button functionality with additional leading 0 prevention
-     * @param digit
+     *
      */
-    public void btn0_Click(String digit)
+    public void btn0_Click()
     {
-        if (currentOperator.equals("+") ||
-                currentOperator.equals("-") ||
-                currentOperator.equals("/") ||
-                currentOperator.equals("X"))
-        {
-            if (!tfOutput.getText().equals("0")) // leading 0 prevention
-            {
+        if (currentOperator.isEmpty()) { // first input
+            if (currentInput.isEmpty()) {
+                currentInput = "0";
+                tfOutput.setText("0");
+            } else {
+                currentInput += "0";
                 tfOutput.setText(tfOutput.getText() + "0");
-                secondInput += digit;
-
             }
-        }
-        else
-        {
-            if (!tfOutput.getText().equals("0"))
-            {
+        } else { // second input
+            if (secondInput.isEmpty()) {
+                secondInput = "0";
                 tfOutput.setText(tfOutput.getText() + "0");
-                currentInput += digit;
-
+            } else {
+                secondInput += "0";
+                tfOutput.setText(tfOutput.getText() + "0");
             }
         }
     }
+
+
 
     public void btn1_Click(String digit)
     {
@@ -450,7 +448,7 @@ public class SimpleCalculatorLogic
 
             if (total == Math.floor(total)) // removes decimal value if answer is whole
             {
-                result = String.valueOf((int) total);
+                result = String.valueOf((long) total);
 
             }
             else
@@ -461,11 +459,17 @@ public class SimpleCalculatorLogic
 
             if (resultLength >= 10)
             {
-                tfOutput.setText(result.substring(0, 10).replaceAll("\\.?0*$", "")); // "\\.?0*$ determines if there are 0s after decimal and removes them"
-            }
+                if (result.contains(".")) {
+                    tfOutput.setText(result.replaceAll("\\.?0*$", ""));
+                } else {
+                    tfOutput.setText(result);
+                }            }
             else {
-                tfOutput.setText(result.substring(0, resultLength).replaceAll("\\.?0*$", ""));
-            }
+                if (result.contains(".")) {
+                    tfOutput.setText(result.replaceAll("\\.?0*$", ""));
+                } else {
+                    tfOutput.setText(result);
+                }            }
 
             // resets variables for next calculation
             currentInput = result;
